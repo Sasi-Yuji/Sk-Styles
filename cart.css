@@ -1,0 +1,84 @@
+.cart1{
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 300px;
+    height: 420px;
+    margin: 20px;
+    background-color: rgb(159, 224, 240);
+}
+img{
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+}
+.container{
+    display: flex;
+    gap: 150px;
+    justify-content: center;
+    padding-top: 50px;
+}
+.cart2{
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 300px;
+    height: 420px;
+    margin: 20px;
+    background-color: rgb(159, 224, 240);
+}
+.cart3{
+     border: 2px solid black;
+    border-radius: 10px;
+    width: 350px;
+    height: 420px;
+    margin: 20px;
+
+}
+p{
+    padding-left: 10px;
+
+}
+h1{
+    text-align: center;
+}
+button{
+  margin-left: 70px;
+
+}
+.head{
+    border: 2px solid gray;
+    height: 45px;
+    width: 1525px;
+    padding-bottom: 15px;
+    display: flex;
+    gap: 20px;
+    background-color: antiquewhite;
+
+    
+}
+.hover:hover{
+    color: chocolate;
+}
+.menu{
+    display: flex;
+    text-align: right;
+    padding-left: 1200px;
+    gap: 5px;
+    font-weight: bolder;
+    font-size: 16px;
+    padding-top: 5px;
+    }
+    .or:hover{
+        color: chocolate;
+    }
+    .of:hover{
+        color: chocolate;
+    }
+    .ma:hover{
+        color: chocolate;
+    }
+    body{
+        background-image: url("sk\ logo.png");
+        background-size: cover;
+    
+    }
+    
