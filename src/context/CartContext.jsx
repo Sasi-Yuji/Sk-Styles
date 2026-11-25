@@ -43,6 +43,9 @@ export function CartProvider({ children }) {
   // Cart drawer open state (especially for mobile / quick drawer)
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Checkout modal open state
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
   // Toast notification system
   const [toasts, setToasts] = useState([]);
 
@@ -172,6 +175,8 @@ export function CartProvider({ children }) {
         setSearchQuery,
         isCartOpen,
         setIsCartOpen,
+        isCheckoutOpen,
+        setIsCheckoutOpen,
         toasts,
         showToast,
         removeToast,

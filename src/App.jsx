@@ -8,9 +8,10 @@ import AboutPage from './pages/AboutPage';
 import OffersPage from './pages/OffersPage';
 import LoginPage from './pages/LoginPage';
 import ComponentsShowcase from './pages/ComponentsShowcase';
+import CheckoutModal from './components/CheckoutModal';
 
 function MainContent() {
-  const { activeTab } = useCart();
+  const { activeTab, isCheckoutOpen, setIsCheckoutOpen } = useCart();
 
   return (
     <div className="app-layout">
@@ -24,6 +25,7 @@ function MainContent() {
       </div>
       <Footer />
       <Toast />
+      {isCheckoutOpen && <CheckoutModal onClose={() => setIsCheckoutOpen(false)} />}
     </div>
   );
 }
