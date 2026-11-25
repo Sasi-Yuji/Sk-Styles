@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid</title>
+  <link rel="stylesheet" href="grid.css">
+  <script src="https://kit.fontawesome.com/1c70d60d37.js" crossorigin="anonymous"></script>
+</head>
+<body>
+     
+     <div class="container">
+      <div class="header">
+        <img src="sk style.png" class="ll">
+       <div class="nav">
+        <a href="#" class="btn"><i class="fa-solid fa-house-user"></i><b>Home</b></a>
+        <a href="about.html" class="btn"><i class="fa-solid fa-address-card"></i><b>AboutUs</a></b>
+        <a href="offer.html" class="btn"><i class="fa-solid fa-envelopes-bulk"></i><b>offer</b></a>
+        <a href="index.html" class="btn"><i class="fa-solid fa-circle-user"></i><b>Login</b></a>
+
+        
+          <input type="text" placeholder="Search" class="SearchBar" id="searchBar">
+          <div class="bag"></div><i class="fa-solid fa-bag-shopping"></i>
+          <div class="like"><i class="fa-solid fa-heart"></i></div>
+          
+           
+
+
+       </div>
+       
+
+      </div>
+      <div class="left-sidebar">
+        <h1>Categories</h1>
+        <div class="cat">
+        <p class="ds">NEW ARRIVALS <img src="new-a.jpeg"></p>
+        <p class="ds" data-category="all">ALL PRODUCTS <img src="all-pr.png"></p>
+        <p class="ds" data-category="Shirt">SHIRTS <img src="shsh.png" class="sh"></p>
+        <p class="ds" data-category="Hoodie">HOODIES <img src="hod.png" class="ho"></p>
+        <p class="ds" data-category="Joggers">JOGGERS <img src="jojo.png" class="jo"></p>
+        <p class="ds" data-category="Jacket">JACKETS <img src="jk.png" class="jk" ></p>
+        <p class="ds" data-category="T-Shirt">ANIME T-SHIRTS <img src="ani.png" class="an"></p>
+        <p class="ds" data-category="Jean">JEANS <img src="jean.png" class="jj"></p>
+        </div>
+      </div>
+      <div class="content">
+        <div class="productpage">
+        <div class="cart1" data-category="Shirt" data-price="18">
+          <img src="shir.webp">
+          <b><p class="shirt">Men green Full Sleeves Shirt</p></b>
+          <div class="btm">
+         <p class="dol"><b>$18</b></p>
+          <button class="bt">Pick</button>
+          </div>
+        </div>
+
+        <div class="cart1" data-category="Hoodie" data-price="45">
+          <img src="hood.webp">
+         <b><p class="shirt">Dark Brown Premium Hoodie</p></b>
+         <div class="btm">
+         <p class="dol"><b>$45</b></p>
+          <button class="bt">Pick</button>
+          </div>
+        </div>
+
+        <div class="cart1" data-category="Joggers" data-price="17">
+          <img src="jojoj.jpeg">
+          <b><p class="shirt">Black Gauge Cargo Joggers</p></b>
+          <div class="btm">
+         <p class="dol"><b>$17</b></p>
+          <button class="bt">Pick</button>
+          </div>
+        </div>
+
+        <div class="cart1" data-category="Jacket" data-price="33">
+          <img src="jack.jpeg">
+          <div class="product">
+          <p class="shirt"><b>Black Heavy Denim Jacket</b></p>
+          <div class="btm">
+         <p class="dol"><b>$33</b></p>
+          <button class="bt">Pick</button>
+          </div>
+          </div>
+        </div>
+
+        <div class="cart1" data-category="T-Shirt" data-price="15">
+          <img src="onepiece.webp">
+          <b><p class="shirt">Black Anime Graphic T-Shirt</p></b>
+          <div class="btm">
+         <p class="dol"><b>$15</b></p>
+          <button class="bt">Pick</button>
+          </div>
+        </div>
+
+        <div class="cart1" data-category="Jean" data-price="49">
+          <img src="jeanj.webp">
+          <b><p class="shirt">Grey Washed Slim fit Jean</p></b>
+          <div class="btm">
+         <p class="dol"><b>$49</b></p>
+          <button class="bt">Pick</button>
+          </div>
+        </div>
+     </div>
+  
+      </div>
+      <div id="cart-widget">
+      <div class="cart-items">
+        <h2>Shopping Cart</h2>
+        <h4>ORDER SUMMARY</h4>
+        <div id="checkoutContainer"></div>
+      </div>
+      </div>
+      
+
+     </div>
+    <div class="footer">
+        <p class="rights"><b>@2025 All Rights Reseved.SK STYLES</b></p>
+      </div>
+     <script src="product.js"></script>
+</body>
+</html>

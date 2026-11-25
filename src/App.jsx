@@ -1,0 +1,37 @@
+import React from 'react';
+import { CartProvider, useCart } from './context/CartContext';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Toast from './components/Toast';
+import StorePage from './pages/StorePage';
+import AboutPage from './pages/AboutPage';
+import OffersPage from './pages/OffersPage';
+import LoginPage from './pages/LoginPage';
+import ComponentsShowcase from './pages/ComponentsShowcase';
+
+function MainContent() {
+  const { activeTab } = useCart();
+
+  return (
+    <div className="app-layout">
+      <Navbar />
+      <div className="main-viewport">
+        {activeTab === 'home' && <StorePage />}
+        {activeTab === 'about' && <AboutPage />}
+        {activeTab === 'offers' && <OffersPage />}
+        {activeTab === 'login' && <LoginPage />}
+        {(activeTab === 'showcase' || activeTab === 'collections') && <ComponentsShowcase />}
+      </div>
+      <Footer />
+      <Toast />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <CartProvider>
+      <MainContent />
+    </CartProvider>
+  );
+}

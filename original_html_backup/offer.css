@@ -1,0 +1,40 @@
+.navbar-brand{
+    color: goldenrod;
+}
+.navbar-nav{
+    padding-left: 1100px;
+    gap: 25px;
+}
+h2{
+    text-align: center;
+    padding-top: 30px;
+}
+.card-img-top{
+    height: 350px;
+    width: 500px;
+    padding-bottom: 10px;
+}
+.tshit{
+    height: 50px;
+    width: 80px;
+    padding-bottom: 10px;
+}
+.card-group{
+    padding-top: 15px;
+}
+h3{
+    text-align: center;
+    padding-top: 30px;
+}
+.accordion{
+    margin-left: 90px;
+    margin-right: 90px;
+    margin-top: 30px;
+}
+.progress{
+    width: 100px;
+    margin-top: 5px;
+}
+.btn{
+    margin-left: 5px
+}
