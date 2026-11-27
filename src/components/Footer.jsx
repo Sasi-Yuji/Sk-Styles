@@ -28,52 +28,61 @@ export default function Footer() {
   };
 
   return (
-    <footer className="modern-footer">
-      {/* 4 Value Proposition Cards */}
-      <div className="footer-trust-grid">
-        <div className="trust-card">
-          <div className="trust-icon-box">
-            <Truck size={22} />
+    <>
+      {/* =========================================================================
+         1. DISTINCT ELEVATED TRUST & VALUE PROPOSITIONS STRIP
+         Crisp light contrast surface placed above dark footer
+         ========================================================================= */}
+      <section className="site-trust-strip" aria-label="Store Guarantees">
+        <div className="footer-trust-grid">
+          <div className="trust-card">
+            <div className="trust-icon-box">
+              <Truck size={22} />
+            </div>
+            <div>
+              <strong>Fast Express Shipping</strong>
+              <span>Delivered in 3–5 working days</span>
+            </div>
           </div>
-          <div>
-            <strong>Fast Express Shipping</strong>
-            <span>Delivered in 3–5 working days</span>
+
+          <div className="trust-card">
+            <div className="trust-icon-box">
+              <RotateCcw size={22} />
+            </div>
+            <div>
+              <strong>7-Day Easy Returns</strong>
+              <span>Hassle-free replacement policy</span>
+            </div>
+          </div>
+
+          <div className="trust-card">
+            <div className="trust-icon-box">
+              <ShieldCheck size={22} />
+            </div>
+            <div>
+              <strong>100% Secure Checkout</strong>
+              <span>256-bit encrypted transactions</span>
+            </div>
+          </div>
+
+          <div className="trust-card">
+            <div className="trust-icon-box">
+              <Award size={22} />
+            </div>
+            <div>
+              <strong>Premium Craftsmanship</strong>
+              <span>Organic combed cotton & fleece</span>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="trust-card">
-          <div className="trust-icon-box">
-            <RotateCcw size={22} />
-          </div>
-          <div>
-            <strong>7-Day Easy Returns</strong>
-            <span>Hassle-free replacement policy</span>
-          </div>
-        </div>
-
-        <div className="trust-card">
-          <div className="trust-icon-box">
-            <ShieldCheck size={22} />
-          </div>
-          <div>
-            <strong>100% Secure Checkout</strong>
-            <span>256-bit encrypted transactions</span>
-          </div>
-        </div>
-
-        <div className="trust-card">
-          <div className="trust-icon-box">
-            <Award size={22} />
-          </div>
-          <div>
-            <strong>Premium Craftsmanship</strong>
-            <span>Organic combed cotton & fleece</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Multi-Column Footer Content */}
-      <div className="footer-content-wrap">
+      {/* =========================================================================
+         2. MAIN LUXURY DARK FOOTER
+         ========================================================================= */}
+      <footer className="modern-footer">
+        {/* Main Multi-Column Footer Content */}
+        <div className="footer-content-wrap">
         {/* Brand & Newsletter Column */}
         <div className="footer-brand-info">
           <div className="footer-logo-row">
@@ -113,7 +122,7 @@ export default function Footer() {
         <div className="footer-links-col">
           <h4>Navigation</h4>
           <ul className="footer-links-list">
-            <li><button onClick={() => setActiveTab('home')}>Store Catalog</button></li>
+            <li><button onClick={() => setActiveTab('products')}>Products Catalog</button></li>
             <li><button onClick={() => setActiveTab('about')}>About Us</button></li>
             <li><button onClick={() => setActiveTab('offers')}>Trending Offers</button></li>
             <li><button onClick={() => setActiveTab('collections')}>Collections & Lookbook</button></li>
@@ -165,5 +174,6 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  </>
+);
 }

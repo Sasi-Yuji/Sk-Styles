@@ -55,27 +55,68 @@ export default function ProductPage() {
   return (
     <div className="product-page-root min-h-screen bg-stone-50/50 dark:bg-stone-950">
       {/* =========================================================================
-         1. CLEAN PRODUCT CATALOG HEADER (NO HERO SECTION)
+         1. MODERN LUXURY PRODUCT HERO SECTION
          ========================================================================= */}
-      <header className="bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 py-10 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-2.5">
-              <Sparkles size={13} />
-              <span>OFFICIAL PRODUCT STORE</span>
+      <header className="relative bg-gradient-to-r from-stone-950 via-slate-900 to-stone-900 text-white overflow-hidden border-b border-stone-800 py-12 md:py-16 px-6">
+        {/* Ambient Glow Orbs */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+          {/* Left Column: Editorial Headline & Value Propositions */}
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-500/15 border border-amber-500/30 text-amber-400 mb-4 shadow-sm backdrop-blur-md">
+              <Sparkles size={13} className="text-amber-400" />
+              <span>COLLECTION 2026 • OFFICIAL MEN'S APPAREL & SNEAKERS</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 dark:text-white tracking-tight">
-              All Products & Footwear
+            
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+              Curated Drops & <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-rose-400 to-amber-200">Performance Footwear</span>
             </h1>
-            <p className="text-sm text-stone-500 dark:text-stone-400 mt-1 max-w-2xl">
-              Discover our complete mixed catalog of Kestrel running shoes, heavyweight organic hoodies, tailored jackets, and street joggers.
+
+            <p className="text-sm sm:text-base text-stone-300 mt-3.5 leading-relaxed max-w-xl">
+              Engineered street silhouettes, heavyweight combed cotton, and responsive race-day soles. Discover our complete mixed catalog of 16 in-demand streetwear and footwear pieces.
             </p>
+
+            {/* Quick Value Badges */}
+            <div className="flex flex-wrap items-center gap-3 mt-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-stone-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>In Stock & Ready to Ship</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-stone-200">
+                <span>Free Express Shipping (₹)</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-300">
+                <span>{filteredProducts.length} Items Available</span>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 shadow-sm">
-              {filteredProducts.length} Items Available
-            </span>
+          {/* Right Column: Featured Sneaker & Apparel Showcase Card */}
+          <div className="w-full lg:w-auto flex-shrink-0">
+            <div className="p-5 sm:p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row items-center gap-5 hover:border-white/20 transition-all">
+              <div className="flex items-center -space-x-6">
+                <div className="w-24 h-24 rounded-2xl bg-stone-800/90 border border-stone-700/80 p-2 shadow-lg flex items-center justify-center transform -rotate-3 hover:rotate-0 transition-transform">
+                  <img src="/onyx.png" alt="Kestrel Onyx" className="w-full h-full object-contain" />
+                </div>
+                <div className="w-24 h-24 rounded-2xl bg-stone-800/90 border border-stone-700/80 p-2 shadow-lg flex items-center justify-center transform rotate-6 hover:rotate-0 transition-transform">
+                  <img src="/hood.png" alt="Dark Brown Hoodie" className="w-full h-full object-contain" />
+                </div>
+              </div>
+
+              <div className="text-center sm:text-left">
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-400 block">Featured Drop Combo</span>
+                <h3 className="text-base font-extrabold text-white mt-0.5">Vapor Pace 3 + Heavy Hoodie</h3>
+                <p className="text-xs text-stone-400 mt-1">Starting from ₹2,499 • Sizes 8–11 & S–XXL</p>
+                <div className="mt-3 flex items-center justify-center sm:justify-start gap-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-extrabold text-xs">
+                    ₹5,499
+                  </span>
+                  <span className="text-stone-400 text-xs">Top Performance Sneaker</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>

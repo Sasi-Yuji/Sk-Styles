@@ -50,22 +50,14 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Desktop Nav Pills */}
+          {/* Desktop Nav Pills (Unified: Single Product Catalog Tab, removed duplicate Store) */}
           <nav className="navbar-links" aria-label="Main Navigation">
             <button 
-              className={`nav-item-btn ${activeTab === 'home' ? 'active' : ''}`}
-              onClick={() => handleNavClick('home')}
-            >
-              <Home size={16} />
-              <span>Store</span>
-            </button>
-
-            <button 
-              className={`nav-item-btn ${activeTab === 'products' ? 'active' : ''}`}
+              className={`nav-item-btn ${(activeTab === 'products' || activeTab === 'home') ? 'active' : ''}`}
               onClick={() => handleNavClick('products')}
             >
               <ShoppingBag size={16} />
-              <span>Product</span>
+              <span>Products</span>
             </button>
 
             <button 
@@ -201,13 +193,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col gap-1.5">
               <button 
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${activeTab === 'home' ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}
-                onClick={() => handleNavClick('home')}
-              >
-                <Home size={18} /> Store (Hero & Rail)
-              </button>
-              <button 
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${activeTab === 'products' ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${(activeTab === 'products' || activeTab === 'home') ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}
                 onClick={() => handleNavClick('products')}
               >
                 <ShoppingBag size={18} /> Products & Footwear
