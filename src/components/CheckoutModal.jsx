@@ -223,17 +223,17 @@ export default function CheckoutModal({ onClose }) {
               <div className="order-summary-box">
                 <div className="summary-row">
                   <span>Cart Items ({cart.length})</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
                 <div className="summary-row">
                   <span>Shipping & Handling</span>
                   <span className="text-emerald-600 font-bold">
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? 'FREE' : `₹${shipping.toLocaleString("en-IN")}`}
                   </span>
                 </div>
                 <div className="summary-row total-highlight">
                   <strong className="summary-total-label">Total Payable</strong>
-                  <strong className="price-tag">${grandTotal.toFixed(2)}</strong>
+                  <strong className="price-tag">₹{grandTotal.toLocaleString("en-IN")}</strong>
                 </div>
               </div>
 
@@ -246,7 +246,7 @@ export default function CheckoutModal({ onClose }) {
                   <span>Processing Order...</span>
                 ) : (
                   <>
-                    <span>Confirm & Pay ${grandTotal.toFixed(2)}</span>
+                    <span>Confirm & Pay ₹{grandTotal.toLocaleString("en-IN")}</span>
                     <ArrowRight size={16} />
                   </>
                 )}

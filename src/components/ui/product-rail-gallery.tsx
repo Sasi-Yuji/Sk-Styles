@@ -26,6 +26,8 @@ export interface RailGarment {
   tag?: string;
   /** Short facts listed in the detail view. */
   details?: string[];
+  /** Drawn hanger for this specific piece. Use "hook-only" when the photo has a hanger inside and only needs the rail hook, or "none" to hide both. */
+  hanger?: "wood" | "matte" | "hook-only" | "none";
 }
 
 export interface ClothingRailHeroLabels {
@@ -357,6 +359,8 @@ const HOOK = "M100,36 L100,-0.4 C100,-3.4 102.2,-4.2 103.9,-2.8 C104.9,-2 105.4,
 const HOOK_HI = "M99.5,30 L99.5,-0.2 C99.5,-2.4 101,-3.2 102.4,-2.6";
 const BAR = "M38,57 Q70,38 100,36 Q130,38 162,57";
 const BAR_HI = "M40,54.5 Q71,35.5 100,33.5 Q129,35.5 160,54.5";
+const BAR_IMG = "M64,50 Q80,38 100,36 Q120,38 136,50";
+const BAR_IMG_HI = "M65,48 Q81,35.5 100,33.5 Q119,35.5 135,48";
 
 function Hook({ uid }: { uid: string }) {
   return (
@@ -371,34 +375,40 @@ function Hook({ uid }: { uid: string }) {
   );
 }
 
-function Hanger({ uid, side, kind, material }: { uid: string; side: "front" | "back"; kind: GarmentKind | null; material: "wood" | "matte" | "none" }) {
+function Hanger({ uid, side, kind, material, hasImage }: { uid: string; side: "front" | "back"; kind: GarmentKind | null; material: "wood" | "matte" | "hook-only" | "none"; hasImage?: boolean }) {
   const art = kind ? artFor(kind, side) : null;
   const bar = material === "wood" ? `url(#${uid}-wood)` : "currentColor";
+  const barPath = hasImage ? BAR_IMG : BAR;
+  const barHiPath = hasImage ? BAR_IMG_HI : BAR_HI;
   return (
     <svg aria-hidden="true" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMin meet" className={`absolute inset-0 size-full overflow-visible ${material === "matte" ? "text-foreground/85" : ""}`}>
       {art?.hood && <path d={art.hood} fill="var(--garment-color)" />}
       {art?.hood && <path d={art.hood} fill="black" fillOpacity="0.22" />}
       {art?.under && <path d={art.under} fill="var(--garment-under)" />}
-      {material !== "none" && (
+      {material !== "none" && material !== "hook-only" && (
         <>
-          <path d={BAR} fill="none" stroke="black" strokeOpacity="0.25" strokeWidth="9.5" strokeLinecap="round" transform="translate(0.6 1.6)" />
-          <path d={BAR} fill="none" stroke={bar} strokeWidth="8.5" strokeLinecap="round" />
-          {material === "wood" && <path d={BAR} fill="none" stroke={`url(#${uid}-woodgrain)`} strokeWidth="8.5" strokeLinecap="round" />}
-          <path d={BAR_HI} fill="none" stroke="white" strokeOpacity={material === "wood" ? 0.3 : 0.14} strokeWidth="1.1" strokeLinecap="round" />
-          <Hook uid={uid} />
+          <path d={barPath} fill="none" stroke="black" strokeOpacity="0.25" strokeWidth="9.5" strokeLinecap="round" transform="translate(0.6 1.6)" />
+          <path d={barPath} fill="none" stroke={bar} strokeWidth="8.5" strokeLinecap="round" />
+          {material === "wood" && <path d={barPath} fill="none" stroke={`url(#${uid}-woodgrain)`} strokeWidth="8.5" strokeLinecap="round" />}
+          <path d={barHiPath} fill="none" stroke="white" strokeOpacity={material === "wood" ? 0.3 : 0.14} strokeWidth="1.1" strokeLinecap="round" />
         </>
       )}
+      {material !== "none" && <Hook uid={uid} />}
     </svg>
   );
 }
 
-function SideHanger({ uid, material }: { uid: string; material: "wood" | "matte" | "none" }) {
+function SideHanger({ uid, material }: { uid: string; material: "wood" | "matte" | "hook-only" | "none" }) {
   if (material === "none") return null;
   const bar = material === "wood" ? `url(#${uid}-wood)` : "currentColor";
   return (
     <svg aria-hidden="true" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMin meet" className={`absolute inset-0 size-full overflow-visible ${material === "matte" ? "text-foreground/85" : ""}`}>
-      <path d="M97.8,35 L102.2,35 L104.5,50 L95.5,50 Z" fill={bar} />
-      <path d="M98.6,36 L100,36 L100,49 L97.3,49 Z" fill="white" fillOpacity="0.22" />
+      {material !== "hook-only" && (
+        <>
+          <path d="M97.8,35 L102.2,35 L104.5,50 L95.5,50 Z" fill={bar} />
+          <path d="M98.6,36 L100,36 L100,49 L97.3,49 Z" fill="white" fillOpacity="0.22" />
+        </>
+      )}
       <Hook uid={uid} />
     </svg>
   );
@@ -976,8 +986,9 @@ export function ClothingRailHero({
           const color = item.color ?? "var(--color-muted-foreground)";
           const trim = item.trim ?? mix(color, -0.12);
           const turned = active === i;
+          const itemHanger = item.hanger ?? hanger;
           const mask = item.image ? `url("${item.image}")` : silhouetteMask(kind, "front");
-          const photoBox = hanger === "none" ? "inset-0" : "inset-x-0 bottom-0 top-[8%]";
+          const photoBox = itemHanger === "none" ? "inset-0" : "inset-x-0 bottom-0 top-[8%]";
           return (
             <button
               key={item.id}
@@ -1000,17 +1011,17 @@ export function ClothingRailHero({
                 </span>
                 {(item.sideImage || item.kind || !item.image) && (
                   <span ref={(node) => { sides.current[i] = node; }} data-face="side" className="absolute inset-0" style={{ transform: `perspective(${PERSPECTIVE}px) rotateY(0deg)` }}>
-                    <SideHanger uid={uid} material={hanger} />
-                    {item.sideImage ? <Photo src={item.sideImage} alt="" full={hanger === "none"} /> : <SideArt uid={uid} kind={kind} color={color} trim={trim} />}
+                    <SideHanger uid={uid} material={itemHanger} />
+                    {item.sideImage ? <Photo src={item.sideImage} alt="" full={itemHanger === "none"} /> : <SideArt uid={uid} kind={kind} color={color} trim={trim} />}
                   </span>
                 )}
                 <span ref={(node) => { turns.current[i] = node; }} data-turn className="absolute inset-0 rounded-lg [transform-style:preserve-3d]" style={{ transform: `perspective(${PERSPECTIVE}px) rotateY(${REST}deg)`, opacity: item.image && !item.sideImage && !item.kind ? 1 : 0 }}>
                   {(["front", "back"] as const).map((side) => (
                     <span key={side} data-face={side} className="absolute inset-0 [backface-visibility:hidden]" style={{ transform: side === "back" ? "rotateY(180deg)" : undefined, ["--garment-color" as string]: color, ["--garment-under" as string]: mix(color, -0.42) }}>
-                      <Hanger uid={uid} side={side} kind={item.image ? null : kind} material={hanger} />
+                      <Hanger uid={uid} side={side} kind={item.image ? null : kind} material={itemHanger} hasImage={Boolean(item.image)} />
                       <span ref={side === "front" ? (node) => { drapes.current[i] = node; } : undefined} data-drape className="absolute inset-0 origin-top [transform:skewX(var(--drape,0deg))]" style={side === "back" ? { transform: "skewX(calc(var(--drape, 0deg) * -1))" } : undefined}>
                         {item.image
-                          ? <Photo src={(side === "back" ? item.backImage : undefined) ?? item.image} alt="" full={hanger === "none"} />
+                          ? <Photo src={(side === "back" ? item.backImage : undefined) ?? item.image} alt="" full={itemHanger === "none"} />
                           : <Fabric uid={uid} kind={kind} side={side} color={color} trim={trim} />}
                         {(!item.image || item.image.endsWith('.png')) && (
                           <span ref={side === "front" ? (node) => { shades.current[i] = node; } : undefined} className={`pointer-events-none absolute bg-black ${item.image ? photoBox : "inset-0"}`} style={{ opacity: "var(--shade, 0.2)", WebkitMask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`, mask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat` }} />
@@ -1198,14 +1209,17 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
         onPointerCancel={() => { angle.current.dragging = false; turnTo(side); }}
       >
         <div ref={spinRef} className="absolute inset-0 [transform-style:preserve-3d]">
-          {(["front", "back"] as const).map((face) => (
-            <div key={face} className="absolute inset-0 [backface-visibility:hidden]" style={{ transform: face === "back" ? "rotateY(180deg)" : undefined, ["--garment-color" as string]: color, ["--garment-under" as string]: mix(color, -0.42) }}>
-              <Hanger uid={uid} side={face} kind={item.image ? null : kind} material={hanger} />
-              {item.image
-                ? <Photo src={(face === "back" ? item.backImage : undefined) ?? item.image} alt={face === "front" ? item.name : ""} full={hanger === "none"} />
-                : <Fabric uid={uid} kind={kind} side={face} color={color} trim={trim} />}
-            </div>
-          ))}
+          {(() => {
+            const itemHanger = item.hanger ?? hanger;
+            return (["front", "back"] as const).map((face) => (
+              <div key={face} className="absolute inset-0 [backface-visibility:hidden]" style={{ transform: face === "back" ? "rotateY(180deg)" : undefined, ["--garment-color" as string]: color, ["--garment-under" as string]: mix(color, -0.42) }}>
+                <Hanger uid={uid} side={face} kind={item.image ? null : kind} material={itemHanger} hasImage={Boolean(item.image)} />
+                {item.image
+                  ? <Photo src={(face === "back" ? item.backImage : undefined) ?? item.image} alt={face === "front" ? item.name : ""} full={itemHanger === "none"} />
+                  : <Fabric uid={uid} kind={kind} side={face} color={color} trim={trim} />}
+              </div>
+            ));
+          })()}
         </div>
       </div>
     </div>

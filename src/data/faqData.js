@@ -70,7 +70,7 @@ export const trendingOffers = [
     badgeColor: "warning",
     discountText: "Save $15",
     description: "Designed to keep you exceptionally warm while maintaining an edgy urban style.",
-    image: "/Hoodies.webp",
+    image: "/Hoodie.png",
     price: 40,
     originalPrice: 55,
     details: "Includes double-lined thermal hood and kangaroo pocket."

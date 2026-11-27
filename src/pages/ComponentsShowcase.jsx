@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { products } from '../data/productsData';
+import ProductCard from '../components/ProductCard';
+import SneakerProductHeroDemo from '@/components/ui/sneaker-demo';
 import { 
   ChevronDown, 
   ChevronLeft, 
@@ -32,19 +35,31 @@ export default function ComponentsShowcase() {
     {
       title: "Summer Collection 2026",
       subtitle: "Lightweight organic cotton shirts & tailored shorts",
-      image: "/shir.webp",
+      image: "/shir.png",
       tag: "50% OFF"
+    },
+    {
+      title: "Kestrel Vapor Pace 3 Footwear",
+      subtitle: "Carbon responsive core in Onyx, Cobalt & Cloud colorways",
+      image: "/onyx.png",
+      tag: "SNEAKER DROP"
     },
     {
       title: "Streetwear Heavyweight Drop",
       subtitle: "Oversized graphic hoodies & utility joggers",
-      image: "/hood.webp",
+      image: "/hood.png",
       tag: "NEW DROP"
+    },
+    {
+      title: "Urban Motion Street Runners",
+      subtitle: "Low-profile street silhouette engineered for daily performance",
+      image: "/onyx-34.png",
+      tag: "HOT SNEAKER"
     },
     {
       title: "Classic Outerwear Archive",
       subtitle: "Rugged stone-washed black denim jackets",
-      image: "/jack.jpeg",
+      image: "/jack.png",
       tag: "TRENDING"
     }
   ];
@@ -226,8 +241,47 @@ export default function ComponentsShowcase() {
         </section>
 
         {/* =========================================================================
+           FEATURED FOOTWEAR & SHOES COLLECTION
+           ========================================================================= */}
+        <section className="my-14">
+          <div className="about-pillars-header mb-8">
+            <div className="rail-header-badge">
+              <Sparkles size={13} className="text-amber-500" />
+              <span>COLLECTION FOOTWEAR LINEUP</span>
+            </div>
+            <h2 className="rail-header-title">Curated Shoe & Sneaker Collection</h2>
+            <p className="rail-header-subtitle">
+              Engineered with responsive foam cores, featherweight uppers, and tailored street styling in sizes 8, 9, 10, and 11.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.filter(p => p.category === 'Shoes').map(shoe => (
+              <ProductCard key={shoe.id} product={shoe} />
+            ))}
+          </div>
+        </section>
+
+        {/* =========================================================================
            3. INTERACTIVE STYLE & SIZING TOOLS GRID
            ========================================================================= */}
+        {/* =========================================================================
+           SNEAKER PRODUCT HERO (SHADCN / GSAP / TAILWIND)
+           ========================================================================= */}
+        <section id="sneaker-hero-section" className="my-12 overflow-hidden rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl bg-white dark:bg-stone-900">
+          <div className="bg-stone-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <Sparkles size={16} className="text-amber-400" />
+              <span className="font-bold text-sm tracking-wide uppercase">Interactive Sneaker Product Hero</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs bg-stone-800 text-stone-300 px-3 py-1 rounded-full border border-stone-700">GSAP Motion</span>
+              <span className="text-xs bg-stone-800 text-stone-300 px-3 py-1 rounded-full border border-stone-700">shadcn / Tailwind</span>
+            </div>
+          </div>
+          <SneakerProductHeroDemo />
+        </section>
+
         <div id="interactive-tools" className="about-pillars-header" style={{ marginTop: '3rem' }}>
           <div className="rail-header-badge">
             <SlidersHorizontal size={13} />
@@ -302,7 +356,7 @@ export default function ComponentsShowcase() {
 
             <div className="popular-item-card">
               <div className="popular-img-wrap">
-                <img src="/shir.webp" alt="Popular Item" />
+                <img src="/shir.png" alt="Popular Item" />
                 <span className="hot-tag">Hot Pick</span>
               </div>
               <div className="popular-body">
@@ -317,7 +371,7 @@ export default function ComponentsShowcase() {
                         id: 1,
                         name: "Men's Olive Relaxed Shirt",
                         price: 18,
-                        image: "/shir.webp",
+                        image: "/shir.png",
                         category: "Shirt"
                       });
                     }}

@@ -81,9 +81,9 @@ export default function ProductCard({ product }) {
 
         <div className="product-bottom">
           <div className="price-container">
-            <span className="current-price">${product.price}</span>
+            <span className="current-price">₹{product.price.toLocaleString("en-IN")}</span>
             {product.originalPrice && (
-              <span className="original-price">${product.originalPrice}</span>
+              <span className="original-price">₹{product.originalPrice.toLocaleString("en-IN")}</span>
             )}
           </div>
 

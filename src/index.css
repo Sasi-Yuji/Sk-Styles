@@ -3755,7 +3755,7 @@ body {
     padding: 0 1rem;
   }
   .left-sidebar {
-    position: static;
+    display: none;
   }
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));

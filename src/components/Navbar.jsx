@@ -61,6 +61,14 @@ export default function Navbar() {
             </button>
 
             <button 
+              className={`nav-item-btn ${activeTab === 'products' ? 'active' : ''}`}
+              onClick={() => handleNavClick('products')}
+            >
+              <ShoppingBag size={16} />
+              <span>Product</span>
+            </button>
+
+            <button 
               className={`nav-item-btn ${activeTab === 'about' ? 'active' : ''}`}
               onClick={() => handleNavClick('about')}
             >
@@ -196,7 +204,13 @@ export default function Navbar() {
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${activeTab === 'home' ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}
                 onClick={() => handleNavClick('home')}
               >
-                <Home size={18} /> Store Catalog
+                <Home size={18} /> Store (Hero & Rail)
+              </button>
+              <button 
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${activeTab === 'products' ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}
+                onClick={() => handleNavClick('products')}
+              >
+                <ShoppingBag size={18} /> Products & Footwear
               </button>
               <button 
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold text-left transition-colors ${activeTab === 'about' ? 'bg-red-600 text-white' : 'text-slate-200 hover:bg-slate-800'}`}

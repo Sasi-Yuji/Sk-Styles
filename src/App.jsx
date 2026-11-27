@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import StorePage from './pages/StorePage';
+import ProductPage from './pages/ProductPage';
 import AboutPage from './pages/AboutPage';
 import OffersPage from './pages/OffersPage';
 import LoginPage from './pages/LoginPage';
@@ -18,6 +19,7 @@ function MainContent() {
       <Navbar />
       <div className="main-viewport">
         {activeTab === 'home' && <StorePage />}
+        {activeTab === 'products' && <ProductPage />}
         {activeTab === 'about' && <AboutPage />}
         {activeTab === 'offers' && <OffersPage />}
         {activeTab === 'login' && <LoginPage />}

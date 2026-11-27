@@ -65,7 +65,7 @@ export default function CartWidget() {
                     </p>
                     <div className="cart-item-meta">
                       <span className="cart-item-size">Size: {item.size}</span>
-                      <span className="cart-item-price">${item.price} each</span>
+                      <span className="cart-item-price">₹{item.price.toLocaleString("en-IN")} each</span>
                     </div>
 
                     {/* Quantity Stepper & Price Calculation */}
@@ -91,7 +91,7 @@ export default function CartWidget() {
                       </div>
 
                       <span className="item-line-total">
-                        ${(item.qty * item.price).toFixed(2)}
+                        ₹{(item.qty * item.price).toLocaleString("en-IN")}
                       </span>
 
                       <button
@@ -113,7 +113,7 @@ export default function CartWidget() {
           <div className="cart-calculation-card">
             <div className="calc-row">
               <span className="calc-label">Subtotal</span>
-              <span className="calc-val">${subtotal.toFixed(2)}</span>
+              <span className="calc-val">₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
 
             <div className="calc-row">
@@ -121,13 +121,13 @@ export default function CartWidget() {
                 <Truck size={14} /> Shipping
               </span>
               <span className="calc-val">
-                {shipping === 0 ? <strong className="free-text">FREE</strong> : `$${shipping.toFixed(2)}`}
+                {shipping === 0 ? <strong className="free-text">FREE</strong> : `₹${shipping.toLocaleString("en-IN")}`}
               </span>
             </div>
 
             {subtotal < 35 && subtotal > 0 && (
               <div className="free-shipping-tip">
-                Add <strong>${(35 - subtotal).toFixed(2)}</strong> more for <strong>FREE SHIPPING!</strong>
+                Add <strong>₹{(1999 - subtotal > 0 ? 1999 - subtotal : 0).toLocaleString("en-IN")}</strong> more for <strong>FREE SHIPPING!</strong>
               </div>
             )}
 
@@ -135,7 +135,7 @@ export default function CartWidget() {
 
             <div className="total-row">
               <span className="total-title">Total</span>
-              <span className="total-amount">${grandTotal.toFixed(2)}</span>
+              <span className="total-amount">₹{grandTotal.toLocaleString("en-IN")}</span>
             </div>
 
             <button

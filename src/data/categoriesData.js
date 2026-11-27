@@ -7,4 +7,5 @@ export const categories = [
   { id: 'Jacket', name: 'JACKETS', image: '/jk.png' },
   { id: 'T-Shirt', name: 'ANIME T-SHIRTS', image: '/ani.png' },
   { id: 'Jean', name: 'JEANS', image: '/jean.png' },
+  { id: 'Shoes', name: 'SHOES', image: '/onyx.png' },
 ];
