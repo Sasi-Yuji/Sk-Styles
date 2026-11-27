@@ -28,12 +28,9 @@ export default function Footer() {
   };
 
   return (
-    <>
-      {/* =========================================================================
-         1. DISTINCT ELEVATED TRUST & VALUE PROPOSITIONS STRIP
-         Crisp light contrast surface placed above dark footer
-         ========================================================================= */}
-      <section className="site-trust-strip" aria-label="Store Guarantees">
+    <div className="footer-wrapper">
+      {/* Contrasting Light Trust Proposition Strip */}
+      <section className="footer-trust-band" aria-label="Store Guarantees">
         <div className="footer-trust-grid">
           <div className="trust-card">
             <div className="trust-icon-box">
@@ -77,9 +74,6 @@ export default function Footer() {
         </div>
       </section>
 
-      {/* =========================================================================
-         2. MAIN LUXURY DARK FOOTER
-         ========================================================================= */}
       <footer className="modern-footer">
         {/* Main Multi-Column Footer Content */}
         <div className="footer-content-wrap">
@@ -122,7 +116,8 @@ export default function Footer() {
         <div className="footer-links-col">
           <h4>Navigation</h4>
           <ul className="footer-links-list">
-            <li><button onClick={() => setActiveTab('products')}>Products Catalog</button></li>
+            <li><button onClick={() => setActiveTab('home')}>Store Hero & Rail</button></li>
+            <li><button onClick={() => setActiveTab('products')}>Products & Footwear</button></li>
             <li><button onClick={() => setActiveTab('about')}>About Us</button></li>
             <li><button onClick={() => setActiveTab('offers')}>Trending Offers</button></li>
             <li><button onClick={() => setActiveTab('collections')}>Collections & Lookbook</button></li>
@@ -134,11 +129,11 @@ export default function Footer() {
         <div className="footer-links-col">
           <h4>Collections</h4>
           <ul className="footer-links-list">
+            <li><span>Kestrel Footwear & Sneakers</span></li>
             <li><span>Shirts & Polos</span></li>
             <li><span>Heavyweight Hoodies</span></li>
             <li><span>Cargo & Flex Joggers</span></li>
             <li><span>Denim Outerwear & Jackets</span></li>
-            <li><span>Anime Graphic Tees</span></li>
             <li><span>Slim Fit Jeans</span></li>
           </ul>
         </div>
@@ -172,8 +167,8 @@ export default function Footer() {
           <span className="payment-tag">APPLE PAY</span>
           <span className="payment-tag">COD</span>
         </div>
-      </div>
-    </footer>
-  </>
-);
+        </div>
+      </footer>
+    </div>
+  );
 }

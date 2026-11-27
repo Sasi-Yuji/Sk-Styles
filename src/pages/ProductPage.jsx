@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/productsData';
-import { categories } from '../data/categoriesData';
 import Sidebar from '../components/Sidebar';
 import ProductCard from '../components/ProductCard';
 import CartWidget from '../components/CartWidget';
@@ -10,7 +9,11 @@ import {
   PackageSearch, 
   X, 
   ShoppingBag,
-  Sparkles
+  Sparkles,
+  ArrowDown,
+  Layers,
+  ShieldCheck,
+  Truck
 } from 'lucide-react';
 
 export default function ProductPage() {
@@ -24,6 +27,11 @@ export default function ProductPage() {
   } = useCart();
 
   const [sortBy, setSortBy] = useState('featured');
+  const catalogRef = useRef(null);
+
+  const scrollToCatalog = () => {
+    catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   // Filter & sort logic across combined shoes & dress/apparel products
   const filteredProducts = useMemo(() => {
@@ -55,101 +63,95 @@ export default function ProductPage() {
   return (
     <div className="product-page-root min-h-screen bg-stone-50/50 dark:bg-stone-950">
       {/* =========================================================================
-         1. MODERN LUXURY PRODUCT HERO SECTION
+         1. LUXURY EDITORIAL PRODUCT STORE HERO
          ========================================================================= */}
-      <header className="relative bg-gradient-to-r from-stone-950 via-slate-900 to-stone-900 text-white overflow-hidden border-b border-stone-800 py-12 md:py-16 px-6">
-        {/* Ambient Glow Orbs */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-          {/* Left Column: Editorial Headline & Value Propositions */}
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-500/15 border border-amber-500/30 text-amber-400 mb-4 shadow-sm backdrop-blur-md">
-              <Sparkles size={13} className="text-amber-400" />
-              <span>COLLECTION 2026 • OFFICIAL MEN'S APPAREL & SNEAKERS</span>
+      <section className="cover-landing-hero">
+        <div className="cover-hero-container">
+          <div className="cover-hero-content">
+            <div className="cover-hero-tag">
+              <Sparkles size={14} className="text-amber-400" />
+              <span>OFFICIAL PRODUCT STORE • SHOES & APPAREL</span>
             </div>
-            
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              Curated Drops & <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-rose-400 to-amber-200">Performance Footwear</span>
+
+            <h1 className="cover-hero-title">
+              THE COMPLETE <br />
+              <span className="cover-title-accent">STYLE ARCHIVE</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-stone-300 mt-3.5 leading-relaxed max-w-xl">
-              Engineered street silhouettes, heavyweight combed cotton, and responsive race-day soles. Discover our complete mixed catalog of 16 in-demand streetwear and footwear pieces.
+            <p className="cover-hero-subtitle">
+              Discover our unified collection pairing engineered Kestrel running sneakers with heavyweight organic cotton hoodies, tailored jackets, and street joggers.
             </p>
 
-            {/* Quick Value Badges */}
-            <div className="flex flex-wrap items-center gap-3 mt-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-stone-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>In Stock & Ready to Ship</span>
+            <div className="cover-hero-actions">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory('all');
+                  scrollToCatalog();
+                }}
+                className="cover-primary-btn"
+              >
+                <span>Browse All Products ({products.length})</span>
+                <ArrowDown size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory('Shoes');
+                  scrollToCatalog();
+                }}
+                className="cover-secondary-btn"
+              >
+                <Layers size={16} />
+                <span>Footwear Lineup</span>
+              </button>
+            </div>
+
+            <div className="cover-hero-perks">
+              <div className="cover-perk-item">
+                <Sparkles size={18} className="perk-icon" />
+                <span>Mixed Shoes & Streetwear</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-stone-200">
-                <span>Free Express Shipping (₹)</span>
+              <div className="cover-perk-item">
+                <Truck size={18} className="perk-icon" />
+                <span>Free Express Shipping Over ₹999</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-300">
-                <span>{filteredProducts.length} Items Available</span>
+              <div className="cover-perk-item">
+                <ShieldCheck size={18} className="perk-icon" />
+                <span>7-Day Fit Guarantee</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Featured Sneaker & Apparel Showcase Card */}
-          <div className="w-full lg:w-auto flex-shrink-0">
-            <div className="p-5 sm:p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row items-center gap-5 hover:border-white/20 transition-all">
-              <div className="flex items-center -space-x-6">
-                <div className="w-24 h-24 rounded-2xl bg-stone-800/90 border border-stone-700/80 p-2 shadow-lg flex items-center justify-center transform -rotate-3 hover:rotate-0 transition-transform">
-                  <img src="/onyx.png" alt="Kestrel Onyx" className="w-full h-full object-contain" />
-                </div>
-                <div className="w-24 h-24 rounded-2xl bg-stone-800/90 border border-stone-700/80 p-2 shadow-lg flex items-center justify-center transform rotate-6 hover:rotate-0 transition-transform">
-                  <img src="/hood.png" alt="Dark Brown Hoodie" className="w-full h-full object-contain" />
-                </div>
+          <div className="cover-hero-visual">
+            <div className="cover-visual-card bg-gradient-to-br from-slate-800 to-slate-950 flex flex-col items-center justify-center p-6">
+              <div className="grid grid-cols-2 gap-3 w-full items-center justify-items-center mb-16">
+                <img
+                  src="/onyx.png"
+                  alt="Kestrel Vapor Pace 3 Onyx"
+                  className="w-full max-h-44 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-transform duration-500"
+                />
+                <img
+                  src="/hod.png"
+                  alt="Urban Motion Hoodie"
+                  className="w-full max-h-48 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-transform duration-500"
+                />
               </div>
-
-              <div className="text-center sm:text-left">
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-400 block">Featured Drop Combo</span>
-                <h3 className="text-base font-extrabold text-white mt-0.5">Vapor Pace 3 + Heavy Hoodie</h3>
-                <p className="text-xs text-stone-400 mt-1">Starting from ₹2,499 • Sizes 8–11 & S–XXL</p>
-                <div className="mt-3 flex items-center justify-center sm:justify-start gap-2">
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-extrabold text-xs">
-                    ₹5,499
-                  </span>
-                  <span className="text-stone-400 text-xs">Top Performance Sneaker</span>
-                </div>
+              <div className="cover-visual-glass-badge">
+                <span className="glass-badge-eyebrow">CURATED MIX • {filteredProducts.length} ITEMS</span>
+                <strong className="glass-badge-title">Kestrel Footwear & Organic Apparel</strong>
+                <span className="glass-badge-price">Sizes 8–11 & S–XXL Available</span>
               </div>
             </div>
-          </div>
-        </div>
-      </header>
-
-      {/* =========================================================================
-         2. QUICK CATEGORY PILL STRIP (MOVED FROM LANDING PAGE)
-         ========================================================================= */}
-      <section className="quick-category-bar">
-        <div className="quick-category-inner">
-          <span className="quick-cat-label">QUICK FILTERS:</span>
-          <div className="quick-cat-scroll">
-            {categories.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  className={`quick-cat-pill ${isActive ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(cat.id)}
-                >
-                  <img src={cat.image} alt={cat.name} className="quick-cat-icon" />
-                  <span>{cat.name}</span>
-                </button>
-              );
-            })}
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-         3. MAIN STORE CATALOG: SIDEBAR + MIXED PRODUCTS GRID
+         2. MAIN STORE CATALOG: SINGLE CATEGORY FILTER SIDEBAR + MIXED PRODUCTS
          ========================================================================= */}
-      <div className="store-container">
-        {/* Category Sidebar */}
+      <div id="products-catalog" ref={catalogRef} className="store-container">
+        {/* Category Sidebar (Single Clean Filter UI) */}
         <Sidebar />
 
         {/* Main Products Area */}

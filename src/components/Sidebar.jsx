@@ -9,8 +9,10 @@ export default function Sidebar() {
 
   const handleCategorySelect = (categoryId) => {
     setSelectedCategory(categoryId);
-    // When switching category, clearing search query is good or keeps it
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const catalog = document.getElementById('products-catalog');
+    if (catalog) {
+      catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const getProductCount = (catId) => {
