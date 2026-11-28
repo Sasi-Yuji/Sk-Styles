@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -14,6 +14,11 @@ import CheckoutModal from './components/CheckoutModal';
 function MainContent() {
   const { activeTab, isCheckoutOpen, setIsCheckoutOpen } = useCart();
 
+  // Always reset scroll position to top when switching pages
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   return (
     <div className="app-layout">
       <Navbar />
@@ -25,7 +30,7 @@ function MainContent() {
         {activeTab === 'login' && <LoginPage />}
         {(activeTab === 'showcase' || activeTab === 'collections') && <ComponentsShowcase />}
       </div>
-      <Footer />
+      {activeTab !== 'login' && <Footer />}
       <Toast />
       {isCheckoutOpen && <CheckoutModal onClose={() => setIsCheckoutOpen(false)} />}
     </div>

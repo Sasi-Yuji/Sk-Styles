@@ -30,16 +30,24 @@ export default function StorePage() {
     setSearchQuery, 
     isCartOpen, 
     setIsCartOpen,
+    setActiveTab,
     addToCart,
     showToast
   } = useCart();
 
   const [sortBy, setSortBy] = useState('featured');
-  const catalogRef = useRef(null);
   const railRef = useRef(null);
 
   const scrollToCatalog = () => {
-    catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setSelectedCategory('all');
+    setActiveTab('products');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCategoryInProducts = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setActiveTab('products');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const scrollToRail = () => {
@@ -142,11 +150,11 @@ export default function StorePage() {
             <span className="text-xs font-medium text-stone-500">1-Click Add Combo (Save 15% on Apparel + Shoes)</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Combo 1 */}
-            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex items-center justify-between gap-3 hover:shadow-md transition-all">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-4">
+            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex flex-wrap items-center justify-between gap-3 hover:shadow-md transition-all">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex -space-x-4 shrink-0">
                   <img src="/hod.png" alt="Hoodie" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                   <img src="/onyx.png" alt="Onyx Sneaker" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                 </div>
@@ -170,9 +178,9 @@ export default function StorePage() {
             </div>
 
             {/* Combo 2 */}
-            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex items-center justify-between gap-3 hover:shadow-md transition-all">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-4">
+            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex flex-wrap items-center justify-between gap-3 hover:shadow-md transition-all">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex -space-x-4 shrink-0">
                   <img src="/jack.png" alt="Denim Jacket" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                   <img src="/cloud.webp" alt="Cloud Sneaker" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                 </div>
@@ -196,9 +204,9 @@ export default function StorePage() {
             </div>
 
             {/* Combo 3 */}
-            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex items-center justify-between gap-3 hover:shadow-md transition-all">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-4">
+            <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex flex-wrap items-center justify-between gap-3 hover:shadow-md transition-all">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex -space-x-4 shrink-0">
                   <img src="/shir.png" alt="Shirt" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                   <img src="/cobalt.webp" alt="Cobalt Sneaker" className="w-14 h-14 object-contain rounded-xl bg-white p-1 border border-stone-200 shadow-sm" />
                 </div>
@@ -260,7 +268,7 @@ export default function StorePage() {
                       addToCart({
                         id: 1,
                         name: first.name,
-                        price: 18,
+                        price: 999,
                         image: first.image || '/shir.webp',
                         category: 'Shirt'
                       }, 'M');
@@ -268,7 +276,7 @@ export default function StorePage() {
                     className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition-all hover:bg-slate-50 hover:border-slate-400"
                   >
                     <Sparkles size={14} className="text-amber-500" />
-                    <span>Pick Rail Favorite ($18)</span>
+                    <span>Pick Rail Favorite (₹999)</span>
                   </button>
                 </div>
               }
@@ -279,35 +287,142 @@ export default function StorePage() {
 
       
       {/* =========================================================================
-         CATALOG EXPLORER CALL-TO-ACTION BANNER
+         3. EDITORIAL ARCHIVE & MIXED CATALOG SHOWCASE
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-stone-900 via-stone-800 to-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border border-stone-700/60">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-400 mb-3 border border-amber-500/30">
-              <Sparkles size={12} />
-              <span>COMPLETE STORE ARCHIVE</span>
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold leading-tight">
-              Ready to Shop All Products? Explore Footwear & Apparel Mixed Catalog
-            </h3>
-            <p className="text-sm text-stone-300 mt-2">
-              Browse our full inventory of Kestrel sneakers, heavyweight hoodies, denim jackets, cargo joggers, and shirts with quick category filters.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('products');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+      <section className="max-w-[1440px] mx-auto px-6 py-10 pb-6">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-white/10 shadow-2xl p-8 sm:p-12 lg:p-14">
+          <div
+            className="absolute inset-0 pointer-events-none opacity-65"
+            style={{
+              background:
+                'radial-gradient(circle at 82% 25%, rgba(245, 158, 11, 0.16), transparent 45%), radial-gradient(circle at 15% 85%, rgba(230, 57, 70, 0.15), transparent 50%)'
             }}
-            className="px-8 py-4 rounded-full bg-white text-stone-900 font-extrabold text-sm hover:bg-stone-100 transition-all shadow-xl hover:-translate-y-0.5 whitespace-nowrap flex items-center gap-2"
-          >
-            <ShoppingBag size={16} />
-            <span>Open Products Page (16 Items)</span>
-            <ArrowRight size={16} />
-          </button>
+          />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            {/* Left Content & Category Shortcuts */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold tracking-[0.18em] uppercase text-amber-300">
+                <Sparkles size={13} />
+                <span>COMPLETE STORE ARCHIVE • {products.length} PIECES</span>
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08]">
+                Step Into The Full <br />
+                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500 bg-clip-text text-transparent">
+                  Footwear & Apparel Vault
+                </span>
+              </h3>
+
+              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
+                Explore every Kestrel running silhouette alongside 420 GSM organic hoodies, stone-washed denim jackets, cargo joggers, and tailored shirts.
+              </p>
+
+              {/* Quick Category Jump Pills */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {[
+                  { id: 'all', label: 'All Products' },
+                  { id: 'Shoes', label: 'Shoes' },
+                  { id: 'Hoodie', label: 'Hoodies' },
+                  { id: 'Jacket', label: 'Jackets' },
+                  { id: 'Shirt', label: 'Shirts' },
+                  { id: 'Joggers', label: 'Joggers' },
+                  { id: 'Jean', label: 'Jeans' }
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => openCategoryInProducts(cat.id)}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/10 hover:bg-rose-600 border border-white/15 hover:border-rose-500 text-slate-200 hover:text-white transition-all"
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => openCategoryInProducts('all')}
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-slate-950 font-extrabold text-sm hover:bg-amber-400 transition-all shadow-xl hover:-translate-y-0.5"
+                >
+                  <ShoppingBag size={16} />
+                  <span>Open Product Store ({products.length})</span>
+                  <ArrowRight size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('collections');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-sm transition-all"
+                >
+                  <span>Browse Capsules</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Right 2x2 Visual Product Grid */}
+            <div className="lg:col-span-6 grid grid-cols-2 gap-4">
+              {[
+                {
+                  title: 'Kestrel Vapor Onyx',
+                  tag: 'Footwear',
+                  price: '₹5,499',
+                  img: '/onyx.png',
+                  cat: 'Shoes'
+                },
+                {
+                  title: 'Urban Motion Hoodie',
+                  tag: '420 GSM Fleece',
+                  price: '₹1,999',
+                  img: '/Charcoal Grey Urban Motion Hoodie.png',
+                  cat: 'Hoodie'
+                },
+                {
+                  title: 'Heavy Denim Jacket',
+                  tag: 'Outerwear',
+                  price: '₹2,499',
+                  img: '/jack.png',
+                  cat: 'Jacket'
+                },
+                {
+                  title: 'Kestrel Vapor Cobalt',
+                  tag: 'Footwear',
+                  price: '₹5,499',
+                  img: '/cobalt.webp',
+                  cat: 'Shoes'
+                }
+              ].map((tile) => (
+                <button
+                  key={tile.title}
+                  type="button"
+                  onClick={() => openCategoryInProducts(tile.cat)}
+                  className="group text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="h-32 sm:h-36 w-full flex items-center justify-center rounded-xl bg-slate-900/60 p-3 mb-3 overflow-hidden">
+                    <img
+                      src={tile.img}
+                      alt={tile.title}
+                      className="max-h-28 object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_12px_20px_rgba(0,0,0,0.6)]"
+                    />
+                  </div>
+                  <div className="flex items-end justify-between gap-2 w-full">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">
+                        {tile.tag}
+                      </span>
+                      <strong className="text-xs sm:text-sm font-extrabold text-white block leading-tight mt-0.5">
+                        {tile.title}
+                      </strong>
+                    </div>
+                    <span className="text-xs font-black text-slate-200 shrink-0">{tile.price}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

@@ -2,177 +2,213 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/productsData';
 import ProductCard from '../components/ProductCard';
-import SneakerProductHeroDemo from '@/components/ui/sneaker-demo';
 import { 
-  ChevronDown, 
   ChevronLeft, 
   ChevronRight, 
-  HelpCircle, 
-  Heart, 
   Sparkles, 
-  Loader2, 
   Check, 
-  Info, 
-  Clock, 
-  Package,
   Layers,
   ShieldCheck,
   ArrowDown,
+  ArrowRight,
   ShoppingBag,
-  SlidersHorizontal,
-  Compass
+  Compass,
+  Ruler
 } from 'lucide-react';
 
 export default function ComponentsShowcase() {
-  const { showToast, addToCart } = useCart();
+  const { showToast, addToCart, setActiveTab, setSelectedCategory } = useCart();
 
-  // Accordion state
-  const [openFaq, setOpenFaq] = useState(1);
-
-  // Carousel state
+  // Lookbook slider state
   const [carouselIndex, setCarouselIndex] = useState(0);
   const carouselSlides = [
     {
-      title: "Summer Collection 2026",
-      subtitle: "Lightweight organic cotton shirts & tailored shorts",
-      image: "/shir.png",
-      tag: "50% OFF"
-    },
-    {
-      title: "Kestrel Vapor Pace 3 Footwear",
-      subtitle: "Carbon responsive core in Onyx, Cobalt & Cloud colorways",
+      title: "Kestrel Vapor Pace 3 Capsule",
+      subtitle: "Carbon responsive kinetic plate in Onyx Black, Electric Cobalt & Cloud White.",
       image: "/onyx.png",
-      tag: "SNEAKER DROP"
+      tag: "FOOTWEAR DROP",
+      category: "Shoes",
+      priceLabel: "₹5,499"
     },
     {
-      title: "Streetwear Heavyweight Drop",
-      subtitle: "Oversized graphic hoodies & utility joggers",
+      title: "Streetwear Heavyweight Fleece",
+      subtitle: "420 GSM French Terry oversized hoodies & cargo joggers built for urban structure.",
       image: "/hood.png",
-      tag: "NEW DROP"
-    },
-    {
-      title: "Urban Motion Street Runners",
-      subtitle: "Low-profile street silhouette engineered for daily performance",
-      image: "/onyx-34.png",
-      tag: "HOT SNEAKER"
+      tag: "AUTUMN / WINTER",
+      category: "Hoodie",
+      priceLabel: "From ₹1,699"
     },
     {
       title: "Classic Outerwear Archive",
-      subtitle: "Rugged stone-washed black denim jackets",
+      subtitle: "Rugged stone-washed black denim jackets finished with reinforced brass rivets.",
       image: "/jack.png",
-      tag: "TRENDING"
+      tag: "TRENDING ARCHIVE",
+      category: "Jacket",
+      priceLabel: "From ₹1,999"
+    },
+    {
+      title: "Urban Motion Street Runners",
+      subtitle: "Low-profile lightweight street silhouette engineered for 12-hour daily comfort.",
+      image: "/onyx-34.png",
+      tag: "STREET EDITION",
+      category: "Shoes",
+      priceLabel: "₹4,299"
+    },
+    {
+      title: "Organic Tailored Shirting",
+      subtitle: "Breathable long-staple combed cotton shirts tailored for effortless drape.",
+      image: "/shir.png",
+      tag: "SIGNATURE FIT",
+      category: "Shirt",
+      priceLabel: "From ₹999"
     }
   ];
 
-  // Collapse state
-  const [isDetailsCollapsed, setIsDetailsCollapsed] = useState(false);
+  // Curated Capsules (Apparel + Shoes pairings)
+  const capsules = [
+    {
+      id: "stealth",
+      eyebrow: "CAPSULE 01",
+      title: "Monochrome Stealth",
+      subtitle: "Charcoal Urban Motion Hoodie + Cargo Joggers + Kestrel Onyx",
+      comboPrice: 7499,
+      origPrice: 9999,
+      images: ["/hod.png", "/jojoj.png", "/onyx.png"],
+      items: [
+        { id: 8, name: "Charcoal Grey Urban Motion Hoodie", price: 1999, image: "/hod.png", category: "Hoodie", size: "L" },
+        { id: 13, name: "Kestrel Vapor Pace 3 - Onyx Black", price: 5499, image: "/onyx.png", category: "Shoes", size: "9" }
+      ]
+    },
+    {
+      id: "cobalt",
+      eyebrow: "CAPSULE 02",
+      title: "Electric Cobalt Casual",
+      subtitle: "Organic Oxford Shirt + Deep Blue Denim + Kestrel Cobalt",
+      comboPrice: 6499,
+      origPrice: 8499,
+      images: ["/shir.png", "/jean.png", "/cobalt.webp"],
+      items: [
+        { id: 1, name: "Men green Full Sleeves Shirt", price: 999, image: "/shir.png", category: "Shirt", size: "M" },
+        { id: 14, name: "Kestrel Vapor Pace 3 - Cobalt Blue", price: 5499, image: "/cobalt.webp", category: "Shoes", size: "9" }
+      ]
+    },
+    {
+      id: "cloud",
+      eyebrow: "CAPSULE 03",
+      title: "Street Minimal Contrast",
+      subtitle: "Heavy Black Denim Jacket + Anime Graphic Tee + Kestrel Cloud",
+      comboPrice: 7999,
+      origPrice: 10499,
+      images: ["/jack.png", "/onepiece.png", "/cloud.webp"],
+      items: [
+        { id: 4, name: "Black Heavy Denim Jacket", price: 2499, image: "/jack.png", category: "Jacket", size: "L" },
+        { id: 15, name: "Kestrel Vapor Pace 3 - Cloud White", price: 5499, image: "/cloud.webp", category: "Shoes", size: "9" }
+      ]
+    }
+  ];
 
-  // Dropdown state
-  const [selectedDropdownCat, setSelectedDropdownCat] = useState('Select Category');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // Interactive Fit Guide state
+  const [fitMode, setFitMode] = useState('apparel'); // 'apparel' | 'footwear'
+  const [selectedFit, setSelectedFit] = useState('M (38–40" Chest)');
 
-  // Selected Size state
-  const [selectedSize, setSelectedSize] = useState('Medium (38)');
+  const apparelSizes = [
+    { label: 'S (36–38" Chest)', chest: '36–38 in', length: '27.5 in', fit: 'Tailored Slim' },
+    { label: 'M (38–40" Chest)', chest: '38–40 in', length: '28.5 in', fit: 'Signature Regular' },
+    { label: 'L (40–42" Chest)', chest: '40–42 in', length: '29.5 in', fit: 'Relaxed Street' },
+    { label: 'XL (42–44" Chest)', chest: '42–44 in', length: '30.5 in', fit: 'Oversized Boxy' }
+  ];
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
+  const shoeSizes = [
+    { label: 'Size 8 (UK/IN)', chest: '26.5 cm', length: 'EU 42', fit: 'True to Size' },
+    { label: 'Size 9 (UK/IN)', chest: '27.3 cm', length: 'EU 43', fit: 'Most Popular' },
+    { label: 'Size 10 (UK/IN)', chest: '28.0 cm', length: 'EU 44', fit: 'Wide Toe Comfort' },
+    { label: 'Size 11 (UK/IN)', chest: '28.8 cm', length: 'EU 45', fit: 'Extended Length' }
+  ];
 
-  // Popover state
-  const [showPopover, setShowPopover] = useState(false);
+  const activeFitData = fitMode === 'apparel' ? apparelSizes : shoeSizes;
+  const currentFitDetail = activeFitData.find((s) => s.label === selectedFit) || activeFitData[1];
 
-  // Tooltip state
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  // Progress simulation
-  const [progressVal, setProgressVal] = useState(75);
-
-  const prevSlide = () => {
-    setCarouselIndex((prev) => (prev === 0 ? carouselSlides.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
-    setCarouselIndex((prev) => (prev === carouselSlides.length - 1 ? 0 : prev + 1));
+  const handleAddCapsule = (cap) => {
+    cap.items.forEach((item) => addToCart(item, item.size));
+    showToast(`Added "${cap.title}" full capsule to your bag! ✨`, 'success');
   };
 
   return (
-    <div className="showcase-page-container">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950">
       {/* =========================================================================
-         1. LUXURY EDITORIAL STYLE LAB COVER HERO
+         1. FULL-BLEED EDITORIAL COLLECTIONS RUNWAY HERO
          ========================================================================= */}
-      <section className="cover-landing-hero">
-        <div className="cover-hero-container">
-          <div className="cover-hero-content">
-            <div className="cover-hero-tag">
-              <Sparkles size={14} className="text-amber-400" />
-              <span>COLLECTIONS & STYLE LAB • SEASON 2026</span>
+      <section className="relative overflow-hidden bg-slate-950 text-white border-b border-white/10">
+        <div
+          className="absolute inset-0 pointer-events-none opacity-65"
+          style={{
+            background:
+              'radial-gradient(circle at 75% 28%, rgba(59, 130, 246, 0.16), transparent 45%), radial-gradient(circle at 20% 78%, rgba(245, 158, 11, 0.14), transparent 50%)'
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-6 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-md text-[11px] font-bold tracking-[0.18em] uppercase text-amber-300">
+              <Compass size={13} />
+              <span>SEASON 2026 • CURATED CAPSULE LOOKBOOK</span>
             </div>
 
-            <h1 className="cover-hero-title">
-              CURATED LOOKBOOK & <br />
-              <span className="cover-title-accent">STYLE LAB</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.06]">
+              SIGNATURE CAPSULES <br />
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500 bg-clip-text text-transparent">
+                DRESS & FOOTWEAR
+              </span>
             </h1>
 
-            <p className="cover-hero-subtitle">
-              Explore dynamic seasonal lookbooks, interactive fabric selectors, fit checkers, and tactile design components crafted for seamless shopping.
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+              Explore coordinated seasonal capsules combining our heavyweight organic hoodies and raw denim outerwear with engineered Kestrel running sneakers.
             </p>
 
-            <div className="cover-hero-actions">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 type="button"
                 onClick={() => {
-                  const el = document.getElementById('featured-lookbook');
-                  el?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('capsules-grid')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="cover-primary-btn"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm shadow-lg shadow-rose-600/30 transition-all hover:-translate-y-0.5"
               >
-                <span>Browse Lookbook</span>
+                <span>Shop Capsule Looks</span>
                 <ArrowDown size={16} />
               </button>
               <button
                 type="button"
                 onClick={() => {
-                  const el = document.getElementById('interactive-tools');
-                  el?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('footwear-collection')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="cover-secondary-btn"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-sm backdrop-blur-md transition-all"
               >
-                <SlidersHorizontal size={16} />
-                <span>Style Tools</span>
+                <Layers size={16} className="text-amber-400" />
+                <span>Footwear Lineup</span>
               </button>
-            </div>
-
-            {/* Highlights */}
-            <div className="cover-hero-perks">
-              <div className="cover-perk-item">
-                <Layers size={18} className="perk-icon" />
-                <span>Interactive Runway</span>
-              </div>
-              <div className="cover-perk-item">
-                <Sparkles size={18} className="perk-icon" />
-                <span>Dynamic Fit Advisor</span>
-              </div>
-              <div className="cover-perk-item">
-                <ShieldCheck size={18} className="perk-icon" />
-                <span>Fabric Lab Tested</span>
-              </div>
             </div>
           </div>
 
-          {/* Visual Showcase Card */}
-          <div className="cover-hero-visual">
-            <div className="cover-visual-card">
+          <div className="lg:col-span-5">
+            <div className="relative rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-slate-900 aspect-[4/4.5] max-w-md mx-auto group">
               <img
-                src="/cat.webp"
-                alt="SK STYLES Collections"
-                className="cover-visual-img"
+                src="/collections-editorial.jpg"
+                alt="SK STYLES Editorial Capsule"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 onError={(e) => {
-                  e.target.src = '/fashon 2.jpg';
+                  e.target.src = '/onyx.png';
                 }}
               />
-              <div className="cover-visual-glass-badge">
-                <span className="glass-badge-eyebrow">EDITORIAL RUNWAY</span>
-                <span className="glass-badge-title">Autumn / Winter 2026 Capsule</span>
-                <span className="glass-badge-price">Bespoke Fit • Touch & Explore</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 p-5 rounded-2xl bg-slate-900/85 backdrop-blur-xl border border-white/15">
+                <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-rose-400">
+                  EDITORIAL RUNWAY
+                </span>
+                <h3 className="text-lg font-extrabold text-white mt-0.5">
+                  Autumn / Winter 2026 Drop
+                </h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  3 Curated Capsules • Shoes & Streetwear Pairings
+                </p>
               </div>
             </div>
           </div>
@@ -180,379 +216,311 @@ export default function ComponentsShowcase() {
       </section>
 
       {/* =========================================================================
-         2. FEATURED LOOKBOOK CAROUSEL (Properly Proportioned)
+         2. SEASONAL RUNWAY LOOKBOOK SLIDER
          ========================================================================= */}
-      <div id="featured-lookbook" className="showcase-content-wrapper">
-        <div className="about-pillars-header">
-          <div className="rail-header-badge">
-            <Compass size={13} />
-            <span>SEASONAL RUNWAY PREVIEW</span>
+      <section className="max-w-7xl mx-auto px-6 pt-16">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-600 mb-2">
+              <Sparkles size={12} />
+              <span>RUNWAY SPOTLIGHT</span>
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              The Curated Lookbook
+            </h2>
           </div>
-          <h2 className="rail-header-title">The Curated Lookbook</h2>
-          <p className="rail-header-subtitle">
-            Slide through key silhouettes, textile weights, and seasonal pairings.
-          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCarouselIndex((p) => (p === 0 ? carouselSlides.length - 1 : p - 1))}
+              aria-label="Previous slide"
+              className="w-10 h-10 rounded-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors shadow-sm"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setCarouselIndex((p) => (p === carouselSlides.length - 1 ? 0 : p + 1))}
+              aria-label="Next slide"
+              className="w-10 h-10 rounded-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors shadow-sm"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
 
-        <section className="showcase-card full-width lookbook-carousel-card">
-          <div className="showcase-header">
-            <h3>Featured Lookbook Slider</h3>
-            <span className="component-tag">Seasonal Lookbook</span>
-          </div>
-
-          <div className="carousel-wrapper">
-            <div className="carousel-slide-content">
-              <img 
-                src={carouselSlides[carouselIndex].image} 
-                alt={carouselSlides[carouselIndex].title} 
-                className="carousel-img"
-              />
-              <div className="carousel-backdrop-overlay"></div>
-              <div className="carousel-caption">
-                <span className="carousel-badge">{carouselSlides[carouselIndex].tag}</span>
-                <h2>{carouselSlides[carouselIndex].title}</h2>
-                <p>{carouselSlides[carouselIndex].subtitle}</p>
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 text-white border border-white/10 shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-12 items-center min-h-[360px] p-8 sm:p-12 gap-8">
+            <div className="md:col-span-6 space-y-4 z-10">
+              <span className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-rose-600 text-white">
+                {carouselSlides[carouselIndex].tag}
+              </span>
+              <h3 className="text-3xl sm:text-4xl font-black leading-tight">
+                {carouselSlides[carouselIndex].title}
+              </h3>
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-md">
+                {carouselSlides[carouselIndex].subtitle}
+              </p>
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <button
-                  className="carousel-cta"
-                  onClick={() => showToast(`Added ${carouselSlides[carouselIndex].title} to moodboard!`, 'info')}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(carouselSlides[carouselIndex].category);
+                    setActiveTab('products');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-slate-900 font-extrabold text-xs uppercase tracking-wider hover:bg-amber-400 transition-colors"
                 >
-                  Explore Capsule Drop
+                  <span>Shop {carouselSlides[carouselIndex].category}</span>
+                  <ArrowRight size={14} />
                 </button>
+                <span className="text-sm font-bold text-amber-400">
+                  {carouselSlides[carouselIndex].priceLabel}
+                </span>
               </div>
             </div>
 
-            <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous slide">
-              <ChevronLeft size={20} />
-            </button>
-            <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next slide">
-              <ChevronRight size={20} />
-            </button>
-
-            <div className="carousel-dots">
-              {carouselSlides.map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`dot ${carouselIndex === idx ? 'active' : ''}`}
-                  onClick={() => setCarouselIndex(idx)}
-                />
-              ))}
+            <div className="md:col-span-6 flex items-center justify-center">
+              <img
+                src={carouselSlides[carouselIndex].image}
+                alt={carouselSlides[carouselIndex].title}
+                className="max-h-72 object-contain drop-shadow-[0_24px_45px_rgba(0,0,0,0.75)] transition-transform duration-500 hover:scale-105"
+              />
             </div>
           </div>
-        </section>
 
-        {/* =========================================================================
-           FEATURED FOOTWEAR & SHOES COLLECTION
-           ========================================================================= */}
-        <section className="my-14">
-          <div className="about-pillars-header mb-8">
-            <div className="rail-header-badge">
-              <Sparkles size={13} className="text-amber-500" />
-              <span>COLLECTION FOOTWEAR LINEUP</span>
-            </div>
-            <h2 className="rail-header-title">Curated Shoe & Sneaker Collection</h2>
-            <p className="rail-header-subtitle">
-              Engineered with responsive foam cores, featherweight uppers, and tailored street styling in sizes 8, 9, 10, and 11.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.filter(p => p.category === 'Shoes').map(shoe => (
-              <ProductCard key={shoe.id} product={shoe} />
+          {/* Slide Dots */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            {carouselSlides.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Slide ${idx + 1}`}
+                onClick={() => setCarouselIndex(idx)}
+                className={`h-2 rounded-full transition-all ${
+                  carouselIndex === idx ? 'w-7 bg-rose-500' : 'w-2 bg-white/30 hover:bg-white/60'
+                }`}
+              />
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* =========================================================================
-           3. INTERACTIVE STYLE & SIZING TOOLS GRID
-           ========================================================================= */}
-        {/* =========================================================================
-           SNEAKER PRODUCT HERO (SHADCN / GSAP / TAILWIND)
-           ========================================================================= */}
-        <section id="sneaker-hero-section" className="my-12 overflow-hidden rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl bg-white dark:bg-stone-900">
-          <div className="bg-stone-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <Sparkles size={16} className="text-amber-400" />
-              <span className="font-bold text-sm tracking-wide uppercase">Interactive Sneaker Product Hero</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs bg-stone-800 text-stone-300 px-3 py-1 rounded-full border border-stone-700">GSAP Motion</span>
-              <span className="text-xs bg-stone-800 text-stone-300 px-3 py-1 rounded-full border border-stone-700">shadcn / Tailwind</span>
-            </div>
-          </div>
-          <SneakerProductHeroDemo />
-        </section>
-
-        <div id="interactive-tools" className="about-pillars-header" style={{ marginTop: '3rem' }}>
-          <div className="rail-header-badge">
-            <SlidersHorizontal size={13} />
-            <span>INTERACTIVE SIZING & WARDROBE CONTROLS</span>
-          </div>
-          <h2 className="rail-header-title">Style & Wardrobe Lab</h2>
-          <p className="rail-header-subtitle">
-            Test size selectors, popover shipping estimators, and real-time inventory feeds.
+      {/* =========================================================================
+         3. CURATED CAPSULE LOOKS (APPAREL + SHOES COMBOS)
+         ========================================================================= */}
+      <section id="capsules-grid" className="max-w-7xl mx-auto px-6 pt-16">
+        <div className="max-w-2xl mb-8">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 mb-2">
+            <Layers size={12} />
+            <span>COMPLETE WARDROBE SETS</span>
+          </span>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+            Signature Style Capsules
+          </h2>
+          <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">
+            Pre-styled head-to-toe pairings combining heavyweight garments and performance footwear.
           </p>
         </div>
 
-        <div className="showcase-grid">
-          {/* 1. Tailored Sizing & Fit Advisor */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Tailored Sizing & Fit</h3>
-              <span className="component-tag">Fit Selector</span>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {capsules.map((cap) => (
+            <div
+              key={cap.id}
+              className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 p-6 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between gap-6"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[11px] font-black tracking-widest uppercase text-rose-600">
+                    {cap.eyebrow}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600">
+                    Save 15% Bundle
+                  </span>
+                </div>
 
-            <div className="list-group-demo">
-              <label className="demo-label">Select Your Fit Profile</label>
-              <div className="list-group-container">
-                {['Small (36 Chest)', 'Medium (38 Chest)', 'Large (40 Chest)', 'X-Large (42 Chest)'].map((size) => (
-                  <button
-                    key={size}
-                    className={`list-group-item-btn ${selectedSize === size ? 'selected' : ''}`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    <span>{size}</span>
-                    {selectedSize === size && <Check size={16} />}
-                  </button>
-                ))}
-              </div>
-
-              <div className="pagination-group">
-                <label className="demo-label">Lookbook Page</label>
-                <div className="pagination-row">
-                  <button 
-                    className="page-btn" 
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  >
-                    Prev
-                  </button>
-                  {[1, 2, 3].map((page) => (
-                    <button
-                      key={page}
-                      className={`page-num-btn ${currentPage === page ? 'active' : ''}`}
-                      onClick={() => setCurrentPage(page)}
+                <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-stone-100/80 dark:bg-stone-800/60 mb-5">
+                  {cap.images.map((img, i) => (
+                    <div
+                      key={i}
+                      className="aspect-square rounded-xl bg-white dark:bg-stone-900 p-2 flex items-center justify-center border border-stone-200/70 dark:border-stone-700"
                     >
-                      {page}
-                    </button>
+                      <img src={img} alt={cap.title} className="max-h-20 object-contain" />
+                    </div>
                   ))}
-                  <button 
-                    className="page-btn" 
-                    disabled={currentPage === 3}
-                    onClick={() => setCurrentPage((p) => Math.min(3, p + 1))}
-                  >
-                    Next
-                  </button>
                 </div>
-              </div>
-            </div>
-          </section>
 
-          {/* 2. Signature Silhouette Highlight Card */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Signature Silhouette</h3>
-              <span className="component-tag">Hero Piece</span>
-            </div>
-
-            <div className="popular-item-card">
-              <div className="popular-img-wrap">
-                <img src="/shir.png" alt="Popular Item" />
-                <span className="hot-tag">Hot Pick</span>
+                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">{cap.title}</h3>
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+                  {cap.subtitle}
+                </p>
               </div>
-              <div className="popular-body">
-                <h4>Men's Olive Relaxed Shirt</h4>
-                <p>Tailored from 100% combed organic cotton with mother-of-pearl buttons.</p>
-                <div className="popular-footer">
-                  <span className="price">$18.00</span>
-                  <button 
-                    className="buy-btn"
-                    onClick={() => {
-                      addToCart({
-                        id: 1,
-                        name: "Men's Olive Relaxed Shirt",
-                        price: 18,
-                        image: "/shir.png",
-                        category: "Shirt"
-                      });
-                    }}
-                  >
-                    <ShoppingBag size={14} className="mr-1" /> Add to Bag
-                  </button>
+
+              <div className="pt-4 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between gap-3">
+                <div>
+                  <span className="text-xl font-black text-slate-900 dark:text-white">
+                    ₹{cap.comboPrice.toLocaleString('en-IN')}
+                  </span>
+                  <span className="text-xs line-through text-stone-400 ml-2">
+                    ₹{cap.origPrice.toLocaleString('en-IN')}
+                  </span>
                 </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 3. Category & Fiber Specification Drawer */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Category & Fiber Specs</h3>
-              <span className="component-tag">Fabric Details</span>
-            </div>
-
-            <div className="dropdown-demo">
-              <label className="demo-label">Category Browser</label>
-              <div className="dropdown-relative">
-                <button 
-                  className="dropdown-toggle-btn"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                <button
+                  type="button"
+                  onClick={() => handleAddCapsule(cap)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-rose-600 text-white text-xs font-bold transition-colors inline-flex items-center gap-1.5"
                 >
-                  <span>{selectedDropdownCat}</span>
-                  <ChevronDown size={16} />
+                  <ShoppingBag size={14} />
+                  <span>Add Capsule</span>
                 </button>
-                {isDropdownOpen && (
-                  <div className="dropdown-menu-list">
-                    {['Formal Shirts', 'Everyday Denim', 'Thermal Hoodies', 'Outerwear', 'Active Joggers'].map((cat) => (
-                      <button
-                        key={cat}
-                        className="dropdown-item-btn"
-                        onClick={() => {
-                          setSelectedDropdownCat(cat);
-                          setIsDropdownOpen(false);
-                        }}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="collapse-demo-group">
-                <label className="demo-label">Technical Fabric Specs</label>
-                <button 
-                  className="collapse-toggle-btn"
-                  onClick={() => setIsDetailsCollapsed(!isDetailsCollapsed)}
-                >
-                  {isDetailsCollapsed ? 'Hide Fabric Specifications' : 'View Fabric Specifications'}
-                </button>
-                {isDetailsCollapsed && (
-                  <div className="collapsible-info-card">
-                    <strong>100% Long-Staple Combed Cotton</strong>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Pre-shrunk fabric weight: 240 GSM. Machine wash delicate up to 30°C. Do not tumble dry to preserve fabric drape.
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
-          </section>
-
-          {/* 4. Fabric & Care Knowledge Base Accordion */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Fabric & Garment Care</h3>
-              <span className="component-tag">Knowledge Base</span>
-            </div>
-
-            <div className="accordion-box">
-              <div className={`accordion-row ${openFaq === 1 ? 'open' : ''}`}>
-                <button className="accordion-trigger" onClick={() => setOpenFaq(openFaq === 1 ? null : 1)}>
-                  <span>How should I wash heavyweight fleece?</span>
-                  <ChevronDown size={16} className={`arrow-icon ${openFaq === 1 ? 'rotate' : ''}`} />
-                </button>
-                {openFaq === 1 && (
-                  <div className="accordion-body-text">
-                    Turn inside out, wash with cold water on gentle cycle, and lay flat to dry to avoid shrinking the dense French Terry loops.
-                  </div>
-                )}
-              </div>
-
-              <div className={`accordion-row ${openFaq === 2 ? 'open' : ''}`}>
-                <button className="accordion-trigger" onClick={() => setOpenFaq(openFaq === 2 ? null : 2)}>
-                  <span>Do you offer bespoke size tailoring?</span>
-                  <ChevronDown size={16} className={`arrow-icon ${openFaq === 2 ? 'rotate' : ''}`} />
-                </button>
-                {openFaq === 2 && (
-                  <div className="accordion-body-text">
-                    Yes, custom sleeve and inseam adjustments are complimentary for all VIP Club members.
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* 5. Shipping Estimator & Micro-Interactions */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Express Shipping & Wishlist</h3>
-              <span className="component-tag">Micro-Tools</span>
-            </div>
-
-            <div className="interactive-toggles">
-              <div className="popover-unit">
-                <label className="demo-label">Express Delivery Estimator</label>
-                <button 
-                  className="btn-warning-pop"
-                  onClick={() => setShowPopover(!showPopover)}
-                >
-                  <Clock size={16} /> Check Dispatch Time
-                </button>
-                {showPopover && (
-                  <div className="popover-bubble-card">
-                    <strong>Express 48-Hour Dispatch</strong>
-                    <p>Orders placed before 2 PM EST ship same-day with end-to-end priority courier tracking.</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="tooltip-unit">
-                <label className="demo-label">Wishlist Heart</label>
-                <div className="tooltip-anchor">
-                  <button
-                    className="tooltip-icon-btn"
-                    onMouseEnter={() => setShowTooltip(true)}
-                    onMouseLeave={() => setShowTooltip(false)}
-                    onClick={() => showToast('Saved to your private wishlist! ❤️', 'info')}
-                  >
-                    ❤️
-                  </button>
-                  {showTooltip && (
-                    <div className="floating-tooltip">Add to private wishlist</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 6. Live Order Allocation & Toast Simulator */}
-          <section className="showcase-card">
-            <div className="showcase-header">
-              <h3>Order Allocation & Toast</h3>
-              <span className="component-tag">Live Status</span>
-            </div>
-
-            <div className="feedback-controls">
-              <label className="demo-label">Vault Allocation Level: {progressVal}%</label>
-              <div className="progress-track">
-                <div className="progress-fill animated" style={{ width: `${progressVal}%` }}>
-                  {progressVal}% Reserved
-                </div>
-              </div>
-
-              <div className="spinner-toast-row">
-                <div className="spinner-item">
-                  <label className="demo-label">Inventory Sync</label>
-                  <div className="flex items-center gap-2">
-                    <Loader2 size={22} className="spin-animation text-amber-500" />
-                    <span className="text-xs text-slate-500 font-medium">Live</span>
-                  </div>
-                </div>
-
-                <div className="toast-trigger-col">
-                  <label className="demo-label">Cart Toast Simulator</label>
-                  <button 
-                    className="btn-trigger-toast"
-                    onClick={() => showToast('Lookbook piece added to cart! 🛍️', 'success')}
-                  >
-                    Trigger Bag Notification
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
+          ))}
         </div>
-      </div>
+      </section>
+
+      {/* =========================================================================
+         4. CURATED SHOE & SNEAKER COLLECTION
+         ========================================================================= */}
+      <section id="footwear-collection" className="max-w-7xl mx-auto px-6 pt-16">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-600 mb-2">
+              <Sparkles size={12} />
+              <span>FOOTWEAR ARCHIVE</span>
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Kestrel Footwear & Street Runners
+            </h2>
+            <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">
+              Available in UK/IN sizes 8, 9, 10, and 11 with 7-day fit exchange guarantee.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedCategory('Shoes');
+              setActiveTab('products');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="text-xs font-bold text-slate-900 dark:text-white hover:text-rose-600 inline-flex items-center gap-1.5"
+          >
+            <span>Open In Product Store</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products
+            .filter((p) => p.category === 'Shoes')
+            .map((shoe) => (
+              <ProductCard key={shoe.id} product={shoe} />
+            ))}
+        </div>
+      </section>
+
+      {/* =========================================================================
+         5. INTERACTIVE FIT & FABRIC SPECIFICATION STUDIO
+         ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-6 py-16 pb-20">
+        <div className="rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 sm:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-6 space-y-5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-stone-100 dark:bg-stone-800 text-slate-900 dark:text-white">
+              <Ruler size={13} className="text-rose-600" />
+              <span>ATELIER FIT STUDIO</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+              Precision Fit & Sizing Reference
+            </h3>
+            <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+              Toggle between apparel and footwear measurements before picking your size so every silhouette lands cleanly out of the box.
+            </p>
+
+            <div className="inline-flex p-1 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+              <button
+                type="button"
+                onClick={() => {
+                  setFitMode('apparel');
+                  setSelectedFit(apparelSizes[1].label);
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                  fitMode === 'apparel'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'text-stone-600 dark:text-stone-300'
+                }`}
+              >
+                Apparel Fit (S–XL)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFitMode('footwear');
+                  setSelectedFit(shoeSizes[1].label);
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                  fitMode === 'footwear'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'text-stone-600 dark:text-stone-300'
+                }`}
+              >
+                Footwear Sizing (8–11)
+              </button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 space-y-4">
+            <div className="grid grid-cols-2 gap-2.5">
+              {activeFitData.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => setSelectedFit(item.label)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all flex items-center justify-between ${
+                    selectedFit === item.label
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                      : 'bg-stone-50 dark:bg-stone-800 text-slate-800 dark:text-stone-200 border-stone-200 dark:border-stone-700 hover:border-slate-400'
+                  }`}
+                >
+                  <span className="text-xs font-bold">{item.label}</span>
+                  {selectedFit === item.label && <Check size={14} className="text-amber-400" />}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-5 rounded-2xl bg-stone-50 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700 grid grid-cols-3 gap-4 text-center">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">
+                  {fitMode === 'apparel' ? 'Chest' : 'Foot Length'}
+                </span>
+                <strong className="text-sm font-black text-slate-900 dark:text-white mt-0.5 block">
+                  {currentFitDetail.chest}
+                </strong>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">
+                  {fitMode === 'apparel' ? 'Body Length' : 'EU Equivalent'}
+                </span>
+                <strong className="text-sm font-black text-slate-900 dark:text-white mt-0.5 block">
+                  {currentFitDetail.length}
+                </strong>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">
+                  Silhouette
+                </span>
+                <strong className="text-sm font-black text-rose-600 mt-0.5 block">
+                  {currentFitDetail.fit}
+                </strong>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-stone-500 pt-1">
+              <ShieldCheck size={15} className="text-emerald-500 shrink-0" />
+              <span>Unsure between sizes? Enjoy free 7-day doorstep size exchanges on every order.</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
